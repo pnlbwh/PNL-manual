@@ -1,0 +1,35 @@
+#+OPTIONS: toc:2
+
+
+* Creating whitematteranalysis environment
+
+In your project directory, make a file called something like 'conda-environment.yml'.
+In this file put the following:
+
+#+BEGIN_EXAMPLE
+name: <projectname>
+dependencies:
+  - nibabel
+  - numpy
+  - vtk
+  - joblib
+  - matplotlib
+  - pip:
+     - git+https://github.com/SlicerDMRI/whitematteranalysis.git@664bb45b34003689f0dccbed45cf864bb11ce4a5
+#+END_EXAMPLE
+
+Then run:
+
+#+BEGIN_EXAMPLE
+conda env create -f  conda-environment.yml
+source activate <projectname>
+#+END_EXAMPLE
+
+And you should then be able to run the wma scripts.  If it complains about a missing dependency,
+add it to conda-environment.yml and update the environment:
+
+#+BEGIN_EXAMPLE
+conda env update -n <projectname> -f conda-environment.yml
+#+END_EXAMPLE
+
+For more info on managing conda environments, see https://conda.io/docs/using/envs.html.

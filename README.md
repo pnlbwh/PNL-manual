@@ -1,3 +1,6 @@
+# `pnlscripts`
+
+
 
 # Disk usage logging
 
@@ -25,21 +28,66 @@ can be unreliable at times.
 
 Make sure to check regularly that the report is being generated every week.
 
+# Ad-hoc Software Installation
+
+
+    git clone git://github.com/reckbo/pnlpipe && cd pnlpipe
+    source activate pnlpipe
+
+To get a list of available software packages, run
+
+    ./pnlpipe install -h
+
+    Usage:
+        pnlpipe install [SWITCHES] softwareModule
+
+    where softwareModule is one of:
+    BRAINSTools
+    FreeSurfer
+    HCPPipelines
+    Slicer
+    UKFTractography
+    mrtrix3
+    nrrdchecker
+    tract_querier
+    trainingDataT1AHCC
+    trainingDataT2Masks
+    whitematteranalysis
+
+
+To install one of them, running
+
+    ./pnlpipe install <software>
+
+For example,
+
+    ./pnlpiipe install UKFTractography --version DiffusionPropagator
+
+installs the `DiffusionPropagator` branch of `UKFTractography`.
+The software is installed in `$PNLPIPE_SOFT`.
+
+## UKFTractography Issues
+
+Sometimes installing `UKFTractography` will give a build error, in this case
+delete `$soft/UKFTractography-build` and try installing again.
+
 
 # Conda: Software and Python Environments
-
-Anaconda is installed on the cluster as well as the local network.
-There are currently some virtualenv activation scripts on the cluster,
-but we replacing them with conda as our python package manager.
-The advantage of conda is that it is general purpose and not limited to python
-only packages.  This helps managing python packages that have external dependencies,
-such as NumPy, SciPy, VTK, and Matplotlib.
 
 It is recommended that each project have its own isolated software environment.
 The advantages of this over a global environment are that it protects the
 project from changes to the global environment, allows projects to use different
-software configurations, and records of what software was used to generate the
+software configurations, and records what software was used to generate the
 data.
+
+To help with this, we are transitioning to using [pnlpipe](https://github.com/reckbo/pnlpipe)
+to run our pipelines and install MRI processing software, and conda for setting up
+our python environments.
+
+Conda is a general purpose package manager whose advantage over virtualenv is
+that it is not limited to python packages. This helps managing python packages
+that have external dependencies such as NumPy, SciPy, VTK, and Matplotlib.
+Conda is installed on the cluster as well as the local network.
 
 To setup a conda environment, each project lists its dependencies in a file
 called `environment.yml`.  Here's an example for a project that uses
@@ -55,10 +103,12 @@ called `environment.yml`.  Here's an example for a project that uses
           - pip:
             - git+https://github.com/SlicerDMRI/whitematteranalysis.git@664bb45b34003689f0dccbed45cf864bb11ce4a5
 
-To create and activate this environment, run
+To create and activate this environment, you would run
 
     conda env create -f  environment.yml
     source activate wma-664bb45
+
+For running some of our standard pipelines, see [pnlpipe](https://github.com/reckbo/pnlpipe).
 
 
 ## Further Reading
@@ -68,6 +118,8 @@ To create and activate this environment, run
 
 
 # Creating a Whitematteranalysis Environment
+
+## Using Conda
 
 In your project directory, make a file called something like `environment.yml`.
 In this file put the following:
@@ -91,9 +143,9 @@ change the name to reflect this new commit.
 Now run
 
     conda env create -f  environment.yml
-    source activate <name>
+    source activate wma-664bb45  # or wma-<chosen_commit>
 
-and you should be able to run the whitematteranalsysis scripts. If it
+and you should be able to run the whitematteranalysis scripts. If it
 complains about a missing dependency, add it to `environment.yml` and
 update the environment:
 
@@ -101,3 +153,23 @@ update the environment:
 
 For more info on managing conda environments,
 see [Managing Environments](https://conda.io/docs/using/envs.html).
+
+## Using pnlpipe
+
+    git clone git://github.com/reckbo/pnlpipe && cd pnlpipe
+    source activate pnlpipe
+    ./pnlpipe install whitematteranalysis --version <github_commit>
+    source $soft/whitematteranalysis-<github_commit>/env.sh
+
+
+# Tracking Projects
+
+See [pnldash](https://github.com/reckbo/pnldash).
+
+
+# Cluster
+
+## Software Modules
+
+module load matlab
+module unload matlab

@@ -6,8 +6,12 @@
     - [pnldash](#pnldash)
     - [UKFTractography](#ukftractography)
     - [BRAINSTools (including ANTs)](#brainstools-including-ants)
+    - [Slicer](#slicer)
     - [Whitematteranalysis](#whitematteranalysis)
+    - [tract_querier](#tractquerier)
+    - [Washington University HCPPipelines](#washington-university-hcppipelines)
     - [nrrdchecker](#nrrdchecker)
+    - [MRtrix3](#mrtrix3)
     - [Matlab](#matlab)
     - [Testing DWIConvert](#testing-dwiconvert)
     - [dwipipeline multi-shell](#dwipipeline-multi-shell)
@@ -90,9 +94,9 @@ PNLDASH_DB=/data/pnl/soft/pnldash/db`.
 
 ## UKFTractography
 
-homepage: github.com/pnlbwh/ukftractography
-cluster: /data/pnl/soft/UKFTractography-*
-network: /rfanfs/pnl-zorro/software/UKFTractography-*
+* homepage: github.com/pnlbwh/ukftractography
+* cluster: /data/pnl/soft/UKFTractography-*
+* network: /rfanfs/pnl-zorro/software/UKFTractography-*
 
 To install latest:
 
@@ -104,9 +108,9 @@ delete `$PNLPIPE_SOFT/UKFTractography-build` and try installing again.
 
 ## BRAINSTools (including ANTs)
 
-homepage: github.com/BRAINSia/BRAINSTools
-cluster: /data/pnl/soft/BRAINSTools-bin-*
-network: /rfanfs/pnl-zorro/software/BRAINSTools-bin-*
+* homepage: github.com/BRAINSia/BRAINSTools
+* cluster: /data/pnl/soft/BRAINSTools-bin-*
+* network: /rfanfs/pnl-zorro/software/BRAINSTools-bin-*
 
 To install the latest and add it to your `PATH` and `ANTSPATH`:
 
@@ -117,17 +121,52 @@ Sometimes installing `BRAINSTools` will give a build error, in this case delete
 `$PNLPIPE_SOFT/BRAINSTools-build` and try installing again.
 
 
+## Slicer
+
+* homepage: www.slicer.org
+* cluster: /data/pnl/soft/Slicer-*-linux-amd64
+* network: /rfanfs/pnl-zorro/software/Slicer-*-linux-amd64
+
+To install, for example, version `4.7.0`:
+
+    ./pnlpipe install Slicer --version 4.7.0
+
 ## Whitematteranalysis
 
 * homepage: https://github.com/SlicerDMRI/whitematteranalysis
 * cluster: /data/pnl/soft/whitematteranalysis-*
-* network: /rfanfs/pnl-zorro/whitematteranalysis-*
+* network: /rfanfs/pnl-zorro/software/whitematteranalysis-*
 
 To install the latest and add it to the `PATH` and `PYTHONPATH`:
 
     cd /path/to/a/pnlpipe
     ./pnlpipe install whitematteranalysis --version master
     source $soft/whitematteranalysis-<commit>/env.sh
+
+## tract_querier
+
+* homepage: https://github.com/demianw/tract_querier
+* cluster: /data/pnl/soft/tract_querier-*
+* network: /rfanfs/pnl-zorro/software/tract_querier-*
+
+To install the latest and add it to the `PATH` and `PYTHONPATH`:
+
+    cd /path/to/a/pnlpipe
+    ./pnlpipe install tract_querier --version master
+    source $soft/tract_querier-<commit>/env.sh
+
+
+## Washington University HCPPipelines
+
+* homepage: https://github.com/Washington-University/Pipelines
+* cluster: /data/pnl/soft/HCPPipelines-*
+* network: /rfanfs/pnl-zorro/software/HCPPipelines-*
+
+To install version `3.22.0`:
+
+    cd /path/to/a/pnlpipe
+    ./pnlpipe install HCPPipelines --version master
+
 
 ## nrrdchecker
 
@@ -153,6 +192,18 @@ To manually build on the cluster:
 
 You can copy the output to the PNL local network to use it there (where `stack`
 or `cabal` isn't installed).
+
+
+## MRtrix3
+
+* homepage: https://github.com/MRtrix3/mrtrix3
+* cluster: /data/pnl/soft/mrtrix3-*
+* network: /rfanfs/pnl-zorro/software/mrtrix3-*
+
+To install latest version:
+
+    cd /path/to/a/pnlpipe
+    ./pnlpipe install mrtrix3 --version master
 
 
 ## Matlab

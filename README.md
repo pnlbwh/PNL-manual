@@ -1,6 +1,117 @@
-# `pnlscripts`
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
+**Table of Contents**
+
+- [Software](#software)
+    - [pnlpipe](#pnlpipe)
+    - [pnldash](#pnldash)
+    - [nrrdchecker](#nrrdchecker)
+    - [Matlab](#matlab)
+    - [Testing DWIConvert](#testing-dwiconvert)
+    - [dwipipeline multi-shell](#dwipipeline-multi-shell)
+- [Disk usage logging](#disk-usage-logging)
+- [Ad-hoc Software Installation](#ad-hoc-software-installation)
+    - [UKFTractography Issues](#ukftractography-issues)
+- [Conda: Software and Python Environments](#conda-software-and-python-environments)
+    - [Further Reading](#further-reading)
+- [Creating a Whitematteranalysis Environment](#creating-a-whitematteranalysis-environment)
+    - [Using Conda](#using-conda)
+    - [Using pnlpipe](#using-pnlpipe)
+- [Cluster](#cluster)
+    - [Bashrc](#bashrc)
+- [unison](#unison)
+
+<!-- markdown-toc end -->
 
 
+# Software
+
+## pnlpipe
+
+Software app to run our pipelines.
+
+* homepage: https://github.com/reckbo/pnlpipe
+
+
+## pnldash
+
+Project tracker, to run in your project directories.
+
+* homepage: https://github.com/reckbo/pnldash
+* cluster: /data/pnl/soft/pnldash
+* network: /rfanfs/pnl-zorro/software/pnldash
+
+The database of projects that people push to is on the cluster at `export
+PNLDASH_DB=/data/pnl/soft/pnldash/db`.
+
+## nrrdchecker
+
+Haskell program that compares the nrrd headers of two or more nrrd images
+and prints or saves a csv with one row per key.
+
+* homepage: https://github.com/reckbo/nrrdchecker
+* cluster: /data/pnl/soft/nrrdchecker-*/nrrdchecker  # binaries
+* cluster: /data/pnl/soft/nrrdchecker # source directory
+* network: /rfanfs/pnl-zorro/software/nrrdchecker-553c310/nrrdchecker
+
+To install/update on the cluster:
+
+    cd /path/to/a/pnlpipe
+    ./pnlpipe install nrrdchecker
+
+To manually build on the cluster:
+
+    module load stack
+    cd /data/pnl/soft/nrrdchecker
+    stack build
+    stack exec -- nrrdchecker -h
+
+You can copy the output to the PNL local network to use it there (where `stack`
+or `cabal` isn't installed).
+
+
+## Matlab
+
+On the cluster, you can load software using `module`.  For example, for matlab:
+
+    module unload matlab
+    module load matlab/2017a
+
+To see a list of available modules:
+
+    module avail
+
+## Testing DWIConvert
+
+`pnlpipe` has a pipeline called `DWIConvertTest` that tests the `BRAINSTools` DWI conversion
+binary by comparing the two nrrds that result from these conversions:
+
+     DWI -> nrrd
+     DWI -> nifti -> nrrd
+
+They should be the same but this isn't the case (see https://github.com/BRAINSia/BRAINSTools/issues/350).
+'space origin' and 'thicknesses' are not preserved in commits `2d5eccb`, `41353e8`, and `b195aae`, the
+commits I tested.
+
+I suggest that when upgrading to a new version of `DWIConvert` that you run this test first.
+On the cluster:
+
+
+     cd /data/pnl/soft/pnlpipe-dwiconverttest
+     # add new commit to pnlpipe_params/DWIConvertTest.params
+     ./runme.sh
+
+This generates an html report `_data/DWIConvertTest.html`.  See the latest at
+
+
+    /data/pnl/soft/pnlpipe-dwiconverttest/_data/DWIConvertTest.html
+
+
+## dwipipeline multi-shell
+
+These are some scripts I wrote long time ago that apply our eddy current
+correction to multi-shell DWI's.
+
+    /projects/schiz/software/scripts/diffusion/dwipipeline_multishell
 
 # Disk usage logging
 
@@ -16,7 +127,7 @@ in
     /rfanfs/pnl-zorro/software/cron/daily.sh
     /rfanfs/pnl-zorro/software/cron/weekly.sh
 
-To make sure the cron job is active, run
+To make sure the cron job is active on a machine, run
 
     crontab -ls
 
@@ -26,13 +137,18 @@ usage will be generated and saved as
 is also configured to email the report to the head RA and Sylvain, although this
 can be unreliable at times.
 
+If not cron job is detected and you want to start one on a particular machine,
+run
+
+    crontab ./pnl.crontab
+
 Make sure to check regularly that the report is being generated every week.
+If
 
 # Ad-hoc Software Installation
 
 
     git clone git://github.com/reckbo/pnlpipe && cd pnlpipe
-    source activate pnlpipe
 
 To get a list of available software packages, run
 
@@ -162,14 +278,41 @@ see [Managing Environments](https://conda.io/docs/using/envs.html).
     source $soft/whitematteranalysis-<github_commit>/env.sh
 
 
-# Tracking Projects
-
-See [pnldash](https://github.com/reckbo/pnldash).
-
-
 # Cluster
 
-## Software Modules
+Listing jobs:
 
-module load matlab
-module unload matlab
+    binfo # lists PNL nodes availability
+    bjobs # lists your LSF jobs
+
+See what software packages are available:
+
+    module avail
+
+Loading and unloading a software package:
+
+    module unload matlab
+    module load matlab/2017a
+
+## Bashrc
+
+The pnl wide bashrc is located in `/data/pnl/soft/bashrc`. Your personal
+`~/.bashrc` should source this file, i.e. put `source /data/pnl/soft/bashrc` at
+the end of `~/.bashrc`.
+
+
+# unison
+
+I used to use `unison` to sync data between the local PNL network and the cluster, primarily
+for INTRuST but also for other datasets.  The configuration for each data set are saved in this
+directory:
+
+    /rfanfs/pnl-zorro/software/.unison
+
+For example, to sync INTRuST, from anywhere on the network run
+
+    unison -perms 0 int  # -perms 0 means ignore change in permissions
+
+It is a bidirectional sync, so changes can be pushed in either direction.
+Press '/' to skip a change, 'f' to accept a proposed change, and '<' or '>'
+to push a change from or to the cluster.

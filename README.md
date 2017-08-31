@@ -21,6 +21,7 @@
 - [Cluster](#cluster)
     - [Bashrc](#bashrc)
 - [unison](#unison)
+- [Multi-Atlas Brain Segmentation (MABS)](#multi-atlas-brain-segmentation-mabs)
 
 <!-- markdown-toc end -->
 
@@ -363,3 +364,54 @@ For example, to sync INTRuST, from anywhere on the network run
 It is a bidirectional sync, so changes can be pushed in either direction.
 Press '/' to skip a change, 'f' to accept a proposed change, and '<' or '>'
 to push a change from or to the cluster.
+
+
+# Multi-Atlas Brain Segmentation (MABS)
+
+The old script to run MABS, `mabs.sh` in `pnlutil`, has been replaced by
+`atlas.py` in `pnlpipe/pnlscripts`. This script includes an option to fuse
+labelmaps using `antsJointFusion`, a method that outperformed several other
+fusion strategies tested in DWI baseline mask prediction. It also fixes a bug in
+that it deletes its temporary output when interrupted and won't fill up the
+cluster `/tmp` directories.
+
+It has an option to accept command line arguments as well as a csv file.
+
+Command line arguments:
+
+    ./pnlscripts/atlas.py args -h
+    Specify training images and labelmaps via commandline arguments.
+
+    Usage:
+        atlas.py args [SWITCHES]
+
+    Meta-switches
+        -h, --help                                     Prints this help message and quits
+        --help-all                                     Print help messages of all subcommands and quit
+        -v, --version                                  Prints the program's version and quits
+
+    Switches
+        --fusion VALUE:{'avg', 'antsJointFusion'}      Also create predicted labelmap(s) by fusing the atlas labelmaps; may be given multiple times
+        -i, --images VALUE:str                         list of images in quotations, e.g. "img1.nrrd img2.nrrd"; required
+        -l, --labels VALUE:str                         list of labelmap images in quotations, e.g. "mask1.nrrd mask2.nrrd cingr1.nrrd cingr2.nrrd"; required
+        -n, --names VALUE:str                          list of names for generated labelmaps, e.g. "atlasmask atlascingr"; required
+        -o, --out VALUE:str                            output directory; required
+        -t, --target VALUE:ExistingFile                target image; required
+
+Csv file argument:
+
+    ./pnlscripts/atlas.py csv -h
+    Specify training images and labelmaps via a csv file.  The names in the header row will be used to name the generated atlas labelmaps.
+
+    Usage:
+        atlas.py csv [SWITCHES] csv
+
+    Meta-switches
+        -h, --help                                     Prints this help message and quits
+        --help-all                                     Print help messages of all subcommands and quit
+        -v, --version                                  Prints the program's version and quits
+
+    Switches
+        --fusion VALUE:{'avg', 'antsJointFusion'}      Also create predicted labelmap(s) by averaging the atlas labelmaps; may be given multiple times
+        -o, --out VALUE:str                            output directory; required
+        -t, --target VALUE:ExistingFile                target image; required

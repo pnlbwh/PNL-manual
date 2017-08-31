@@ -2,10 +2,12 @@
 **Table of Contents**
 
 - [Software](#software)
+    - [pnlpipe](#pnlpipe)
     - [Ad-hoc Software Installation](#ad-hoc-software-installation)
+    - [pnlscripts](#pnlscripts)
     - [pnldash](#pnldash)
-    - [UKFTractography](#ukftractography)
     - [BRAINSTools (including ANTs)](#brainstools-including-ants)
+    - [UKFTractography](#ukftractography)
     - [Slicer](#slicer)
     - [Whitematteranalysis](#whitematteranalysis)
     - [tract_querier](#tractquerier)
@@ -28,6 +30,19 @@
 
 # Software
 
+## pnlpipe
+
+Software app to run the PNL pipelines, and for writing your own custom pipelines.
+
+* homepage: https://github.com/reckbo/pnlpipe
+
+Install into your project directory:
+
+    git clone https://github.com/reckbo/pnlpipe
+
+See [pnlpipe](https://github.com/reckbo/pnlpipe) for full documentation.
+
+
 ## Ad-hoc Software Installation
 
 `pnlpipe` has a set of recipes for building most of the software used at the
@@ -35,6 +50,7 @@ PNL. It can install multiple versions of the same package, which makes it easy
 to upgrade software for your project without affecting anyone else's currently
 running projects. It installs the software to `$PNLPIPE_SOFT`, which on the cluster
 is set to `/data/pnl/soft` and on the network is set to `/rfanfs/pnl-zorro/software`.
+(`$soft` is also set to these directories.)
 
 To get a list of available software packages:
 
@@ -81,6 +97,25 @@ University's
 
     ./pnlpipe install HCPPipelines --version 3.22.0
 
+## pnlscripts
+
+The old bash scripts in `pnlutil` are deprecated and have been replaced by
+`pnlpipe/pnlscripts`. The new scripts are implemented in python, using the
+plumbum shell scripting library. This makes them easier to understand and
+modify, guarantees that temporary intermediate files are cleaned up, and lets
+them accept non-standard file names. Some of the scripts have also been updated
+to use the newer ANTs binaries/API, and some, like `atlas.py`, have additional
+options and features.
+
+Many of the scripts use [ANTs](https://github.com/ANTsX/ANTs), which we get via
+[BRAINSTools](github.com/BRAINSia/BRAINSTools).  Before using these scripts,
+the environment variable `ANTSPATH` needs to be set.  You can do this by running
+
+     source $soft/BRAINSTools-bin-<commit>/env.sh
+
+where `<commit>` is a Github revision or date. This will set up ANTS for that
+particular version of BRAINSTools (see below for installing BRAINSTools).
+
 
 ## pnldash
 
@@ -92,20 +127,6 @@ Project tracker, to run in your project directories.
 
 The database of projects that people push to is on the cluster at `export
 PNLDASH_DB=/data/pnl/soft/pnldash/db`.
-
-## UKFTractography
-
-* homepage: github.com/pnlbwh/ukftractography
-* cluster: /data/pnl/soft/UKFTractography-*
-* network: /rfanfs/pnl-zorro/software/UKFTractography-*
-
-To install latest:
-
-    cd /path/to/a/pnlpipe
-    ./pnlpipe install UKFTractography --version master
-
-Sometimes installing `UKFTractography` will give a build error, in this case
-delete `$PNLPIPE_SOFT/UKFTractography-build` and try installing again.
 
 ## BRAINSTools (including ANTs)
 
@@ -121,6 +142,20 @@ To install the latest and add it to your `PATH` and `ANTSPATH`:
 Sometimes installing `BRAINSTools` will give a build error, in this case delete
 `$PNLPIPE_SOFT/BRAINSTools-build` and try installing again.
 
+
+## UKFTractography
+
+* homepage: github.com/pnlbwh/ukftractography
+* cluster: /data/pnl/soft/UKFTractography-*
+* network: /rfanfs/pnl-zorro/software/UKFTractography-*
+
+To install latest:
+
+    cd /path/to/a/pnlpipe
+    ./pnlpipe install UKFTractography --version master
+
+Sometimes installing `UKFTractography` will give a build error, in this case
+delete `$PNLPIPE_SOFT/UKFTractography-build` and try installing again.
 
 ## Slicer
 
@@ -371,9 +406,9 @@ to push a change from or to the cluster.
 The old script to run MABS, `mabs.sh` in `pnlutil`, has been replaced by
 `atlas.py` in `pnlpipe/pnlscripts`. This script includes an option to fuse
 labelmaps using `antsJointFusion`, a method that outperformed several other
-fusion strategies tested in DWI baseline mask prediction. It also fixes a bug in
-that it deletes its temporary output when interrupted and won't fill up the
-cluster `/tmp` directories.
+fusion strategies that I tested in a DWI baseline mask prediction task. It also
+fixes a bug in that it deletes its temporary output when interrupted and won't
+fill up the cluster's `/tmp` directories.
 
 It has an option to accept command line arguments as well as a csv file.
 

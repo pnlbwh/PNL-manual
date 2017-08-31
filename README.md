@@ -99,7 +99,7 @@ University's
 
 ## pnlscripts
 
-The old bash scripts in `pnlutil` are deprecated and have been replaced by
+The old bash scripts in `pnlutil` are deprecated and are replaced by
 `pnlpipe/pnlscripts`. The new scripts are implemented in python, using the
 plumbum shell scripting library. This makes them easier to understand and
 modify, guarantees that temporary intermediate files are cleaned up, and lets
@@ -130,12 +130,13 @@ PNLDASH_DB=/data/pnl/soft/pnldash/db`.
 
 ## BRAINSTools (including ANTs)
 
-* homepage: github.com/BRAINSia/BRAINSTools
+* homepage: https://github.com/BRAINSia/BRAINSTools
 * cluster: /data/pnl/soft/BRAINSTools-bin-*
 * network: /rfanfs/pnl-zorro/software/BRAINSTools-bin-*
 
 To install the latest and add it to your `PATH` and `ANTSPATH`:
 
+    cd /path/to/pnlpipe
     ./pnlpipe install BRAINSTools --version master
     source $PNLPIPE_SOFT/BRAINSTools-bin-<commit>/env.sh
 
@@ -145,13 +146,13 @@ Sometimes installing `BRAINSTools` will give a build error, in this case delete
 
 ## UKFTractography
 
-* homepage: github.com/pnlbwh/ukftractography
+* homepage: https://github.com/pnlbwh/ukftractography
 * cluster: /data/pnl/soft/UKFTractography-*
 * network: /rfanfs/pnl-zorro/software/UKFTractography-*
 
 To install latest:
 
-    cd /path/to/a/pnlpipe
+    cd /path/to/pnlpipe
     ./pnlpipe install UKFTractography --version master
 
 Sometimes installing `UKFTractography` will give a build error, in this case
@@ -165,6 +166,7 @@ delete `$PNLPIPE_SOFT/UKFTractography-build` and try installing again.
 
 To install, for example, version `4.7.0`:
 
+    cd /path/to/pnlpipe
     ./pnlpipe install Slicer --version 4.7.0
 
 ## Whitematteranalysis
@@ -175,7 +177,7 @@ To install, for example, version `4.7.0`:
 
 To install the latest and add it to the `PATH` and `PYTHONPATH`:
 
-    cd /path/to/a/pnlpipe
+    cd /path/to/pnlpipe
     ./pnlpipe install whitematteranalysis --version master
     source $soft/whitematteranalysis-<commit>/env.sh
 
@@ -187,7 +189,7 @@ To install the latest and add it to the `PATH` and `PYTHONPATH`:
 
 To install the latest and add it to the `PATH` and `PYTHONPATH`:
 
-    cd /path/to/a/pnlpipe
+    cd /path/to/pnlpipe
     ./pnlpipe install tract_querier --version master
     source $soft/tract_querier-<commit>/env.sh
 
@@ -200,7 +202,7 @@ To install the latest and add it to the `PATH` and `PYTHONPATH`:
 
 To install version `3.22.0`:
 
-    cd /path/to/a/pnlpipe
+    cd /path/to/pnlpipe
     ./pnlpipe install HCPPipelines --version master
 
 
@@ -216,7 +218,7 @@ and prints or saves a csv with one row per key.
 
 To install/update on the cluster:
 
-    cd /path/to/a/pnlpipe
+    cd /path/to/pnlpipe
     ./pnlpipe install nrrdchecker
 
 To manually build on the cluster:
@@ -238,7 +240,7 @@ or `cabal` isn't installed).
 
 To install latest version:
 
-    cd /path/to/a/pnlpipe
+    cd /path/to/pnlpipe
     ./pnlpipe install mrtrix3 --version master
 
 
@@ -414,7 +416,7 @@ It has an option to accept command line arguments as well as a csv file.
 
 Command line arguments:
 
-    ./pnlscripts/atlas.py args -h
+    ./pnlscripts/atlas.py args -h  # to setup ANTSPATH, run source $soft/BRAINSTools-bin-<commit>/env.sh
     Specify training images and labelmaps via commandline arguments.
 
     Usage:
@@ -435,7 +437,7 @@ Command line arguments:
 
 Csv file argument:
 
-    ./pnlscripts/atlas.py csv -h
+    ./pnlscripts/atlas.py csv -h  # to setup ANTSPATH, run source $soft/BRAINSTools-bin-<commit>/env.sh
     Specify training images and labelmaps via a csv file.  The names in the header row will be used to name the generated atlas labelmaps.
 
     Usage:
